@@ -3,7 +3,7 @@
 
 ## Preface
 ### PHD application
-As the first author of the paper, I am devoted to pursuing a **PhD** in deep learning, specializing in areas such as **generative modeling, 3D reconstruction, and related fields**. I am driven by a strong passion for pushing the boundaries of knowledge in these domains and leveraging the power of artificial intelligence to address real-world challenges. I am humbly seeking available positions that align with my research interests and offer opportunities for collaboration and growth. Please contact me via jiachenlei@zju.edu.cn to discuss potential opportunities for research collaboration or to provide information about available positions. I am excited about the prospect of joining a dynamic research community and making significant contributions to the field of deep learning.
+As the first author of the paper, I am devoted to pursuing a **PhD** in deep learning, specializing in areas such as **generative modeling, 3D reconstruction, and related fields**. I am driven by a strong passion for pushing the boundaries of knowledge in these domains and leveraging the power of artificial intelligence to address real-world challenges. I am humbly seeking available positions that align with my research interests and offer opportunities for collaboration and growth. Please contact me via jiachenlei@zju.edu.cn to discuss potential opportunities for research collaboration or to provide information about available positions. I am excited about the prospect of joining a dynamic research community and making significant contributions to it.
 
 <!-- I am particularly interested in exploring doctoral programs at prestigious institutions such as MIT, Caltech, CMU, Stanford, Berkeley, and other leading research universities that have a strong focus on deep learning and cutting-edge AI research. -->
 ### Coorporation on topics related to our work
@@ -12,8 +12,31 @@ Besides, the idea presented in our current work has the potential to be further 
 
 ## Training
 
+### first-stage: masked score matching
+```python
+
+```
+
+### second-stage: denoising score matching (common diffusion training)
+```python
+
+``````python
+
+```
+
+## Sampling
+To sample from a model, either trained by masked score matching or denoising score matching, use the following command:
+
+```python
+
+```
 
 ## Evaluation
+To compute FID score on generated images and the reference images which is the model training set under most circumstances, use the following command:
+
+```python
+
+```
 
 ## FAQ
 For your convinience, we present some frequently asked quetions here.
