@@ -20,8 +20,6 @@ Besides, the idea presented in our current work has the potential to be further 
 ### second-stage: denoising score matching (common diffusion training)
 ```python
 
-``````python
-
 ```
 
 ## Sampling
