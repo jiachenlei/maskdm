@@ -1,0 +1,62 @@
+define: &img_size 256
+define: &patch_size 4
+
+pretrained_model_ckpt: ""
+batch_size: 64
+lr: 5.0e-5 # 2.0e-4
+adam_betas: [0.99, 0.99]
+weight_decay: 0.03
+results_folder: ""
+
+ema_decay: 0.999
+ema_update_every: 1
+clip_grad: null
+
+# dataset
+beta_schedule: "cosine"
+num_workers: 2
+shift: false
+loss_weight: "p2" # [p2, min]
+p2_loss_weight_gamma: 0 # if set to 0, then `loss_weight` is disabled and no loss weight will be applied
+
+normalization: true
+clip_max: 1
+clip_min: -1
+
+dataset:
+  NAME: celebahq
+  TASK: uncond
+  PATH: ""
+
+  MASK_TYPE: "block"
+  MASK_RATIO: 0.0
+  MASK_BLOCK_SIZE: 4
+  MASK_CROP_SIZE: -1
+
+  IMG_SIZE: *img_size
+  SHORT_SIDE_SIZE: 256
+  MEAN: [0.5,0.5,0.5]
+  STD: [0.5,0.5,0.5]
+
+  hflip_prob: 0.5
+
+network:
+  name : 'maskdm'
+  img_size : 256
+  patch_size : 4
+  in_chans : 3
+
+  encoder_embed_dim : 512
+  encoder_depth : 13
+  encoder_heads : 8
+
+  decoder_depth: 0  # if zero, then no decoder used, only use linear layer
+
+  mlp_ratio : 4
+  qkv_bias : False
+
+  num_classes: -1
+
+  use_final_conv: False
+  mlp_time_embed : False
+  use_checkpoint : False

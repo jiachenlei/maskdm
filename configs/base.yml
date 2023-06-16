@@ -1,0 +1,82 @@
+# This configuration file lists all supported features and the EXPECTED default values
+
+
+pretrained_model_ckpt: "" # path to pretrained weights, used in finetuning
+
+batch_size: 32            # total batch size of training
+# NOTE: if N gpus are used, then the batch size on each gpu will be `batch_size`// N,
+# make sure `batch_size` is divisible by N
+
+lr: 5.0e-5
+warmup_steps: 0           # warmup steps. default is 0, no warmup
+warmup_lr: -1             # lr in warmup, enabled when `warmup_steps`>0
+adam_betas: [0.99, 0.99]
+weight_decay: 0.03
+results_folder: ""         # path to save the experiment result (ckpt, sampled images).
+# NOTE: The result will be stored in /{results_folder}/experiment name you provide 
+
+ema_decay: 0.999           # the decay parameter of ema model
+ema_update_every: 1        # update frequency for ema model
+clip_grad: null            # gradient clipping
+
+beta_schedule: "cosine"    # noise schedule, [linear, cosine]
+num_workers: 2             # number of dataloader worker
+shift: false               # shift the noise schedule or not
+# NOTE: we did NOT use noise shifting in our experiments
+# please refer to "" for more details
+
+loss_weight: "p2"          # loss weight schedule to use, [p2, min]
+# NOTE: that we did NOT use any weight schedule in our experiments
+p2_loss_weight_gamma: 0    # if set to 0, then `loss_weight` is disabled and no loss weight schedule will be applied
+
+normalization: true        # whether normalize the training data to [-1, 1]. not useful when `USE_DWT` is true
+clip_max: 1                # upper bound for clipping, when using DDIM sampling
+clip_min: -1               # lower bound for clipping, when using DDIM sampling
+
+
+# parameters for dataset
+dataset:
+  NAME: celebahq           # name of the dataset to use, [celeba, celebahq, vggface]
+  TASK: uncond             # generation task to be conducted with, [cond, uncond]
+  PATH: ""                 # path to datset
+  USE_DWT: false           # use DWT or not
+  DWT_LEVEL: 1             # level of DWT, only support 1 level DWT, enabled when `USE_DWT` is true
+
+  MASK_RATIO: 0.0          # mask rate, if equals 0, then masking will be disabled
+  MASK_TYPE: "block" # mask type, [patch, block, crop], enabled when `MASK_RATIO` >0
+  MASK_BLOCK_SIZE: 4       # block size for block-wise masking, enabled when `MASK_RATIO` >0
+  MASK_CROP_SIZE: -1       # crop size for cropping, enabled when `MASK_RATIO` >0
+
+  IMG_SIZE: 256            # size of images used in training
+  SHORT_SIDE_SIZE: -1      # short side size of the image. if >0, then keep h-w ratio while resizing image
+  MEAN: [0.5,0.5,0.5]      # mean used to normalize dataset (reserved for future use)
+  STD: [0.5,0.5,0.5]       # std used to normalize dataset (reserved for future use)
+
+  hflip_prob: 0.0          # random horizontal flip probability
+
+# paramters for network architecture
+network:
+  name : 'mask_uvit'       # name of the architecture to use, [maskdm, mask_dwt]
+  img_size : 256           # size of the image input into the network, should be equal to `IMG_SIZE` in dataset parameters
+  patch_size : 4           # patch size of transformer
+  in_chans : 3             # input image channels, default is 3, set to 12 if use dwt
+
+  encoder_embed_dim : 512  # dimension of uvit encoder
+  encoder_depth : 13       # depth of uvit encoder
+  encoder_heads : 8        # attention head number for uvit encoder
+
+  decoder_depth: 0         # vit decoder depth
+                           # if zero, then no transformer block will be used instead of a single linear layer
+  decoder_embed_dim : 13   # embedding dimension of vit decoder, enabled when `decoder_depth` >0
+  decoder_heads : 8        # attention head number for vit decoder, enabled when `decoder_depth` >0
+
+  mlp_ratio : 4            # scale the dimension of hidden layer in transformer block based on provided embedding dimension
+  qkv_bias : False         # use qkv bias in attention layer
+
+  num_classes: -1          # number of class embeddings for conditional training.
+                           # enabled when `TASK`="cond"
+                           # should be >0 if the TASK in dataset parameters equals 'cond'
+
+  use_final_conv: False    # use additional convolution layer at the end of network
+  mlp_time_embed : False   # use learnable time embedding for the input time condition
+  use_checkpoint : False   # use checkpointing for GPU memory efficient training. (Disabled and Reserved for future use)

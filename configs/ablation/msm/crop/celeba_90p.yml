@@ -1,0 +1,63 @@
+
+# ckpt: "./ckpts/checkpoint-399.pth"
+pretrained_model_ckpt: ""
+batch_size: 256
+lr: 2.0e-4
+adam_betas: [0.99, 0.99]
+weight_decay: 0.03
+results_folder: ""
+
+ema_decay: 0.999
+ema_update_every: 1
+clip_grad: null
+# dataset
+
+beta_schedule: "linear"
+num_workers: 5
+shift: false
+loss_weight: "p2" # [p2, min]
+p2_loss_weight_gamma: 0 # if set to 0, then `loss_weight` is disabled and no loss weight will be applied
+
+normalization: true
+clip_max: 1
+clip_min: -1
+
+dataset:
+  TASK: uncond
+  NAME: celeba
+  PATH: ""
+
+  MASK_RATIO: 0.9
+  MASK_TYPE: "crop"
+  MASK_CROP_SIZE: 5 # equals 225 patches
+  MASK_BLOCK_SIZE: -1
+
+  # augmentation
+  SHORT_SIDE_SIZE: 64
+  IMG_SIZE: 64
+  MEAN: [0.5, 0.5, 0.5]
+  STD: [0.5, 0.5, 0.5]
+  hflip_prob: 0.0
+
+network:
+  name : 'maskdm'
+  img_size : 64
+  patch_size : 4
+  in_chans : 3
+
+  encoder_embed_dim : 512
+  encoder_depth : 13
+  encoder_heads : 8
+
+  decoder_embed_dim: 384
+  decoder_depth: 0  # if zero, then no decoder used, only use linear layer
+  decoder_heads: 6
+
+  mlp_ratio : 4
+  qkv_bias : False
+
+  num_classes: -1
+
+  use_final_conv: False
+  mlp_time_embed : False
+  use_checkpoint : False
