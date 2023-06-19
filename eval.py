@@ -3,13 +3,9 @@ import argparse
 import random
 import numpy as np
 
-import pywt
 
 from accelerate import Accelerator
 from accelerate import DistributedDataParallelKwargs
-
-from gaussian_ddpm import cosine_beta_schedule, linear_beta_schedule
-from dpm_solver import NoiseScheduleVP, model_wrapper, DPM_Solver
 
 import torch
 import torch.distributed as dist
@@ -19,14 +15,12 @@ from torchvision.utils import save_image
 
 from gaussian_ddpm import GaussianDiffusion
 
-from models import get_ae_model
-from models import (MaskedUViT, UViT, Unet,
-                    MaskedDWTUViT, ImprovedMaskedDWTUViT,)
+from models import MaskedUViT, MaskedDWTUViT
 
 from utils.config import parse_yml, combine
 from utils.helper import maybe_unnormalize_to_zero_to_one
 
-from datasets import CelebAHQ, ImageNet1k, CelebA
+from datasets import CelebAHQ, CelebA, VggFace
 
 def parse_terminal_args():
 
@@ -127,14 +121,16 @@ def evaluation():
     diffusion_model.eval()
 
     available_datasets= {
+        "vggface": VggFace,
         "celebahq": CelebAHQ,
-        "imagenet1k": ImageNet1k,
         "celeba": CelebA,
     }
 
-    dataset = available_datasets[args.dataset.NAME](
-        cfg = args.dataset, mode="train", mask_generator=None, verbose = accelerator.is_main_process
-    )
+    dataset = None
+    if args.guidance_weight >=0:
+        dataset = available_datasets[args.dataset.NAME](
+            cfg = args.dataset, mode="train", mask_generator=None, verbose = accelerator.is_main_process
+        )
 
     # load model weights
     for i, ckpt in enumerate(args.ckpt):

@@ -193,7 +193,7 @@ def main():
         mask_generator = DWTMaskingGenerator(
             window_size, dwt_level, *mask_ratio, 
             scale = args.network["scale"],
-            mask_type=mask_type, block_size=mask_block_size,
+            mask_type="patch", block_size=mask_block_size,
         )
 
     elif mask_type == "patch":

@@ -56,7 +56,7 @@ dataset:
 
 # paramters for network architecture
 network:
-  name : 'mask_uvit'       # name of the architecture to use, [maskdm, mask_dwt]
+  name : 'maskdm'       # name of the architecture to use, [maskdm, mask_dwt]
   img_size : 256           # size of the image input into the network, should be equal to `IMG_SIZE` in dataset parameters
   patch_size : 4           # patch size of transformer
   in_chans : 3             # input image channels, default is 3, set to 12 if use dwt

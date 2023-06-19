@@ -110,7 +110,7 @@ class CropMaskingGenerator:
 class DWTMaskingGenerator:
     def __init__(self, input_size, level, approx_mask_ratio, detail_mask_ratio, 
                  scale = 2,
-                 mask_type="random", block_size=1):
+                 mask_type="patch", block_size=1):
         if not isinstance(input_size, tuple):
             input_size = (input_size,) * 2
 
