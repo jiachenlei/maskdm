@@ -59,9 +59,9 @@ def setup_for_distributed(is_master):
 def build_model(args):
     
     name = args.network["name"]
-    if name == "mask_uvit":
+    if name == "maskdm":
         return MaskedUViT(**args.network)
-    elif name =="mask_dwt":
+    elif name =="maskdwt":
         return MaskedDWTUViT(**args.network)
     else:
         raise NotImplementedError(f"Unsupported network type: {name}")
