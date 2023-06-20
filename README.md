@@ -1,6 +1,8 @@
 # Official implementation: "Masked Diffusion Models are Fast Learners"
 
-> Abstract:  
+For a *more intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details of our method. 
+
+**What did we do in summary?**:  
 Diffusion models have emerged as the de-facto technique for image generation, yet
 they entail significant computational overhead, hindering the technique’s broader
 application in the research community. We propose a prior-based denoising training
@@ -18,8 +20,7 @@ diffusion models that directly generate images in the pixel space and facilitate
 learning pre-trained models with excellent generalizability: a diffusion model
 pre-trained on VGGFace2 attains a 46% quality improvement through fine-tuning
 with merely 10% local data.  
-
-For a *more intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details of our method.  
+ 
 
 <!-- ## Preface
 ### Invitation for coorporations on topics related to our work
