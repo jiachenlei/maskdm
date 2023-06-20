@@ -1,48 +1,22 @@
 # Official implementation: "Masked Diffusion Models are Fast Learners"
 
-For a *more intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details of our method. 
-
-**What did we do in summary?**:  
-Diffusion models have emerged as the de-facto technique for image generation, yet
-they entail significant computational overhead, hindering the technique’s broader
-application in the research community. We propose a prior-based denoising training
-framework, the first to incorporate the pre-train and fine-tune paradigm into the
-diffusion model training process, which substantially improves training efficiency
-and shows potential in facilitating various downstream tasks. Our approach centers
-on masking a high proportion (e.g., up to 90%) of the input image and employing
-masked score matching to denoise the visible areas, thereby guiding the diffusion
-model to learn more salient features from training data as prior knowledge. By
-utilizing this masked learning process in a pre-training stage, we efficiently train the
-ViT-based diffusion model on CelebA-HQ 256×256 in the pixel space, achieving a
-4x acceleration and enhancing the quality of generated images compared to DDPM.
-Moreover, our masked pre-training technique is universally applicable to various
-diffusion models that directly generate images in the pixel space and facilitates
-learning pre-trained models with excellent generalizability: a diffusion model
-pre-trained on VGGFace2 attains a 46% quality improvement through fine-tuning
-with merely 10% local data.  
- 
-
-<!-- ## Preface
-### Invitation for coorporations on topics related to our work
-The idea presented in our current work has the potential to be further expanded into various domains of diffusion models. As such, We are eager to engage in future collaborations and explore research topics that are related to the findings of our paper. We sincerely welcome opportunities to collaborate with researchers/organisations that share a similar research interest. Please reach out to me at jiachenlei@zju.edu.cn to discuss potential collaborations.
-
-
-### Seeking available PHD positions in universities of the USA, 2024 fall admission, or possbile intern positions
-As the first author of the paper, I am devoted to pursuing a **CS PhD**, specializing in areas such as **generative modeling, 3D reconstruction, representation learning**, and related fields. I am driven by a strong passion for pushing the boundaries of knowledge in these domains and combining current theory and the deep learning to address real-world challenges. I am humbly seeking available phd positions that align with my research interests and intern opportunities for collaboration and growth. Please contact me via jiachenlei@zju.edu.cn to discuss potential opportunities for phd or intern positions. I am excited about the prospect of joining a dynamic research community and making significant contributions to it. -->
+For an *intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details. 
 
 
 ### Schedule
 As our current project is still a work in progress, we plan to gradually present more analysis and details on our method in the near future.
-- [ ] Submit Appendix of our paper
 - [ ] Analysis on high-resolution images (e.g. 256x256, 512x512) images **without using DWT** in raw pixel space. we observed some interesting phenomenons that are different from current results on CelebA 64x64
 - [ ] Experiments on natural Datasets other than human face: e.g., CIFAR10, LSUN, ImageNet.  
 - [ ] Experiments on applying our method to score-based models (e.g., beyond the DDPM framework): NCSM, etc
 - [ ] Experiments that analyze masked score matching in latent space
 - [ ] More...
 
+## Errata
+- In unconditional image synthesis experiment, the reported time expense of baseline model is inaccurate and is **expeceted to be larger**
+
+We trained the baseline model for 940k steps which took 120 hours on 8 V100s, ~1.3 hour per 10k steps. However, we reported 32 V100-days as the time expense of baseline model in our v1.0 paper, which is smaller than the actual value. The correct time expense is ~**38 V100-day**. As for our method, the reported values are double-checked and found to be precise.
 
 ## FAQ
-For a *more intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details of our method.  
 
 For your convinience, we present frequently asked quetions here.  
 > Is the DWT neccessary for your method to work in pixel space?  
