@@ -17,8 +17,9 @@ Moreover, our masked pre-training technique is universally applicable to various
 diffusion models that directly generate images in the pixel space and facilitates
 learning pre-trained models with excellent generalizability: a diffusion model
 pre-trained on VGGFace2 attains a 46% quality improvement through fine-tuning
-with merely 10% local data.
+with merely 10% local data.  
 
+For a *more intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details of our method.  
 
 <!-- ## Preface
 ### Invitation for coorporations on topics related to our work
@@ -32,7 +33,7 @@ As the first author of the paper, I am devoted to pursuing a **CS PhD**, special
 ### Schedule
 As our current project is still a work in progress, we plan to gradually present more analysis and details on our method in the near future.
 - [ ] Submit Appendix of our paper
-- [ ] Analysis on high-resolution images (e.g. 256x256, 512x512) images **without using DWT** in raw pixel space. Since we observe some different phenomenons in comparison with the results on CelebA 64x64
+- [ ] Analysis on high-resolution images (e.g. 256x256, 512x512) images **without using DWT** in raw pixel space. we observed some interesting phenomenons that are different from current results on CelebA 64x64
 - [ ] Experiments on natural Datasets other than human face: e.g., CIFAR10, LSUN, ImageNet.  
 - [ ] Experiments on applying our method to score-based models (e.g., beyond the DDPM framework): NCSM, etc
 - [ ] Experiments that analyze masked score matching in latent space
@@ -41,6 +42,7 @@ As our current project is still a work in progress, we plan to gradually present
 
 ## FAQ
 For a *more intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details of our method.  
+
 For your convinience, we present frequently asked quetions here.  
 > Is the DWT neccessary for your method to work in pixel space?  
 
@@ -54,8 +56,8 @@ No. Due to limited computation resources, we currently can't afford training dif
 | ------ | -------- | ------ | --- | --- |
 | pretrain_celebahq_m90block4_20.pt | MaskDM-B | CelebA-HQ  256x256 | pre-trained with 4x4 block-wise masking at a 90% mask rate for 200k steps | [HuggingFace](https://huggingface.co/jiachenlei/maskdm/blob/main/pretrain/pretrain_celebahq_m90block4_20.pt) |
 | pretrain_vggface2_m90block4_20.pt| MaskDM-B | Vggface2  256x256 | pre-trained with 4x4 block-wise masking at a 90% mask rate for 200k steps | [HuggingFace](https://huggingface.co/jiachenlei/maskdm/blob/main/pretrain/pretrain_vggface2_m90block4_20.pt) |
-| pretrain_celebahq_maskdm_dwt_20.pt| MaskDM-L | CelebA-HQ  256x256| pre-trained with 4x4 block-wise masking at a 70% mask rate for 200k steps | [HuggingFace](https://huggingface.co/jiachenlei/maskdm/blob/main/celebahq_dwt/pretrain_celebahq_maskdm_dwt_20.pt) |
-| celebahq_maskdm_dwt_55.pt | MaskDM-L | CelebA-HQ 256x256 | pre-trained with 4x4 block-wise masking at a 70% mask rate for 200k steps and fine-tuned for 550k steps | [HuggingFace](https://huggingface.co/jiachenlei/maskdm/blob/main/celebahq_dwt/celebahq_maskdm_dwt_55.pt) |
+| pretrain_celebahq_maskdm_dwt_20.pt| MaskDM-L | CelebA-HQ  256x256| Used DWT. pre-trained with 4x4 block-wise masking at a 70% mask rate for 200k steps | [HuggingFace](https://huggingface.co/jiachenlei/maskdm/blob/main/celebahq_dwt/pretrain_celebahq_maskdm_dwt_20.pt) |
+| celebahq_maskdm_dwt_55.pt | MaskDM-L | CelebA-HQ 256x256 | Used DWT. pre-trained with 4x4 block-wise masking at a 70% mask rate for 200k steps and fine-tuned for 550k steps | [HuggingFace](https://huggingface.co/jiachenlei/maskdm/blob/main/celebahq_dwt/celebahq_maskdm_dwt_55.pt) |
 
 ---
 
@@ -134,11 +136,10 @@ To compute FID score on generated images and the reference images which, under m
 python -m tools.pytorch_fid --device cuda:0 /path/to/image/folder1 /path/to/image/folder2
 
 # notice that the structure of the folder provided in the path should look like:
-
-- /path/to/image/folder1
-    - image file1
-    - image file2
-    ...
+# - /path/to/image/folder1
+#     - image file1
+#     - image file2
+#     ...
 
 ```
 
