@@ -36,18 +36,28 @@ No. Due to limited computation resources, we currently can't afford training dif
 
 ---
 
+
+## Environment
+
+```
+accelerate
+timm
+torch/torchvision
+einops
+wandb
+ema-pytorch
+PyWavelets
+```
+We also released a [docker image](). After download the docker image, You could run the container by the following command:
+
+```bash
+docker run -it --shm-size 50g --gpus all -v /path/to/data:/path/to/data -v /path/to/code:/path/to/code -w /path/to/code jiachenlei/maskdm:latest
+```
+
+
 ## Documentation
 - For your convinience, we also provide a bash script, `run.sh`, which supports masked pre-training, denoising fine-tuning and sampling.  
 - For the usage of `Acclerate` or `Wandb` library, please refer to the official documentation.
-
-### Environment
-```python
-accelerate
-timm
-torch
-PyWavelets
-```
-We also released a [docker image]().
 
 
 ### Training
