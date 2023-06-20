@@ -1,6 +1,23 @@
-# Official implementation of the paper "Masked Diffusion Models are Fast Learners"
+# Official implementation: "Masked Diffusion Models are Fast Learners"
 
-![](./main.png)
+> Abstract:  
+Diffusion models have emerged as the de-facto technique for image generation, yet
+they entail significant computational overhead, hindering the technique’s broader
+application in the research community. We propose a prior-based denoising training
+framework, the first to incorporate the pre-train and fine-tune paradigm into the
+diffusion model training process, which substantially improves training efficiency
+and shows potential in facilitating various downstream tasks. Our approach centers
+on masking a high proportion (e.g., up to 90%) of the input image and employing
+masked score matching to denoise the visible areas, thereby guiding the diffusion
+model to learn more salient features from training data as prior knowledge. By
+utilizing this masked learning process in a pre-training stage, we efficiently train the
+ViT-based diffusion model on CelebA-HQ 256×256 in the pixel space, achieving a
+4x acceleration and enhancing the quality of generated images compared to DDPM.
+Moreover, our masked pre-training technique is universally applicable to various
+diffusion models that directly generate images in the pixel space and facilitates
+learning pre-trained models with excellent generalizability: a diffusion model
+pre-trained on VGGFace2 attains a 46% quality improvement through fine-tuning
+with merely 10% local data.
 
 
 <!-- ## Preface
