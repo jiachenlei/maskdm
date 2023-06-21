@@ -1,7 +1,14 @@
 # Official implementation: "Masked Diffusion Models are Fast Learners"
 
-For an *intuitive* introduction of our method, you could refer to our [project website](). Or you could refer to our [paper]() for more details. 
+For an *intuitive* introduction of our method, you could refer to our [project website](https://sites.google.com/view/maskdm/main). Or you could refer to our [paper](https://arxiv.org/abs/2306.11363) for more details. 
 
+## Preface
+### Invitation for coorporations on topics related to our work
+The idea presented in our current work has the potential to be further expanded into various domains of diffusion models. As such, We are eager to engage in future collaborations and explore research topics that are related to the findings of our paper. We sincerely welcome opportunities to collaborate with researchers/organisations that share a similar research interest. Please reach out to me at jiachenlei@zju.edu.cn to discuss potential collaborations.
+
+
+### First Author Seeking PHD positions, 2024 fall admission
+Obtained my M.S. degree from Zhejiang University this year, I am devoted to pursuing a **CS PhD**, specializing in areas such as **generative modeling, 3D reconstruction, representation learning**, and related fields. I am driven by a strong passion for pushing the boundaries of knowledge in these domains and combining current theory and the deep learning to address real-world challenges. I am humbly seeking available phd positions that align with my research interests. Please contact me via jiachenlei@zju.edu.cn to discuss potential opportunities for phd position.
 
 ### Schedule
 As our current project is still a work in progress, we plan to gradually present more analysis and details on our method in the near future.
