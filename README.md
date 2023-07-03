@@ -12,7 +12,7 @@ Obtained my M.S. degree from Zhejiang University this year, I am devoted to purs
 
 ### Schedule
 As our current project is still a work in progress, we plan to gradually present more analysis and details on our method in the near future.
-- [ ] Analysis on high-resolution images (e.g. 256x256, 512x512) images **without using DWT** in raw pixel space. we observed some interesting phenomenons that are different from current results on CelebA 64x64
+- [ ] Analysis on high-resolution images (e.g. 256x256, 512x512) images **without using DWT** in raw pixel space. we observed some interesting phenomena that are different from current results on CelebA 64x64
 - [ ] Experiments on natural Datasets other than human face: e.g., CIFAR10, LSUN, ImageNet.  
 - [ ] Experiments on applying our method to score-based models (e.g., beyond the DDPM framework): NCSM, etc
 - [ ] Experiments that analyze masked score matching in latent space
