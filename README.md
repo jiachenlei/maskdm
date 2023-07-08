@@ -124,8 +124,9 @@ bash run.sh 0,1,2,3 mask,ddpm,test temp,/path/to/config/file.yml temp,/path/to/c
 To compute FID score on generated images and the reference images which, under most circumstances, is the training set, use the following command:
 
 ```python
-
-python -m tools.pytorch_fid --device cuda:0 /path/to/image/folder1 /path/to/image/folder2
+cd tools
+# run the following command in ./tools
+python pytorch_fid --device cuda:0 /path/to/image/folder1 /path/to/image/folder2
 
 # notice that the structure of the folder provided in the path should look like:
 # - /path/to/image/folder1
