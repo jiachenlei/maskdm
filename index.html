@@ -207,35 +207,39 @@
 		<center><h1>Abstract</h1></center>
 		<tr>
 			<td>
+				<p style="text-align:justify">
 				Diffusion models have emerged as the de-facto technique for image generation, yet
-				they entail significant computational overhead, hindering the technique’s broader
+				they entail significant computational overhead, hindering the technique's broader
 				application in the research community. We propose a prior-based denoising training
 				framework, the first to incorporate the pre-train and fine-tune paradigm into the
 				diffusion model training process, which substantially improves training efficiency
 				and shows potential in facilitating various downstream tasks. Our approach centers
 				on masking a high proportion (e.g., up to 90%) of the input image and employing
 				masked denoising score matching to denoise the visible areas, thereby guiding the
-				diffusion model to learn more salient features from training data as prior knowledge. By utilizing masked learning in a pre-training stage, we efficiently train the
+				diffusion model to learn more salient features from training data as prior knowledge.
+				By utilizing masked learning in a pre-training stage, we efficiently train the
 				ViT-based diffusion model on CelebA-HQ 256 x 256 in the pixel space, achieving
-				a 4x acceleration and enhancing the quality of generated images compared to denoising diffusion probabilistic model (DDPM). Moreover, our masked pre-training
-				technique can be universally applied to various diffusion models that directly generate images in the pixel space, aiding in the learning of pre-trained models with
+				a 4x acceleration and enhancing the quality of generated images compared to denoising
+				diffusion probabilistic model (DDPM). Moreover, our masked pre-training
+				technique can be universally applied to various diffusion models that directly generate
+				images in the pixel space, aiding in the learning of pre-trained models with
 				superior generalizability. For instance, a diffusion model pre-trained on VGGFace2
 				attains a 46% quality improvement through fine-tuning with merely 10% data from
 				a different distribution. Moreover, our method shows the potential to serve as a
-				training paradigm for enhancing the privacy protection capabilities of diffusion
-				models
+				training paradigm for enhancing the privacy protection capabilities of diffusion models
+				</p>
 			</td>
 		</tr>
 	</table>
 	<br>
 
-	<hr>
-	<center><h1>Talk</h1></center>
+	<!-- <hr> -->
+	<!-- <center><h1>Talk</h1></center>
 	<p align="center">
 		<iframe width="660" height="395" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen align="center"></iframe>
-	</p>
+	</p> -->
 
-	<table align=center width=800px>
+	<!-- <table align=center width=800px>
 		<br>
 		<tr>
 			<center>
@@ -244,7 +248,7 @@
 			</center>
 		</tr>
 	</table>
-	<hr>
+	<hr> -->
 
 	<center><h1>Code</h1></center>
 
@@ -314,13 +318,23 @@
 		<tr>
 			<td width=400px>
 				<left>
-					<center><h1>Acknowledgements</h1></center>
-					This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a href="http://richzhang.github.io/">Richard Zhang</a> for a <a href="http://richzhang.github.io/colorization/">colorful</a> ECCV project; the code can be found <a href="https://github.com/richzhang/webpage-template">here</a>.
+					<!-- <center><h1>Acknowledgements</h1></center>
+					This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a href="http://richzhang.github.io/">Richard Zhang</a> for a <a href="http://richzhang.github.io/colorization/">colorful</a> ECCV project; the code can be found <a href="https://github.com/richzhang/webpage-template">here</a>. -->
 				</left>
 			</td>
 		</tr>
 	</table>
 
+
+	<table align=center width=900px>
+		<tr>
+			<td width=400px>
+				<left>
+					Acknowledgements: This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a href="http://richzhang.github.io/">Richard Zhang</a> for a <a href="http://richzhang.github.io/colorization/">colorful</a> ECCV project; the code can be found <a href="https://github.com/richzhang/webpage-template">here</a>.
+				</left>
+			</td>
+		</tr>
+	</table>
 <br>
 </body>
 </html>
