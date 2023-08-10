@@ -114,6 +114,15 @@
 		height: 1px;
 		background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 	}
+
+	button {
+		width: 120px;
+		height: 50px;
+		margin-top: 20px;
+		border-radius: 6px;
+		background: #D9DFE8;
+		border: none;
+	}
 </style>
 
 <html>
@@ -166,20 +175,25 @@
 					</td>
 				</tr>
 			</table>
-			<table align=center width=250px>
-				<tr>
-					<td align=center width=120px>
-						<center>
-							<span style="font-size:24px"><a href='https://arxiv.org/abs/2306.11363'>Paper</a></span>
-						</center>
-					</td>
-					<td align=center width=120px>
-						<center>
-							<span style="font-size:24px"><a href='https://github.com/jiachenlei/maskdm'>GitHub</a></span><br>
-						</center>
-					</td>
-				</tr>
-			</table>
+			<div>
+				<table align=center width=250px>
+					<tr>
+						<td align=center width=120px>
+							<center>
+								<button style="font-size:24px;margin-right:20px" >
+									<a href='https://arxiv.org/abs/2306.11363'>Paper</a>
+								</button>
+							</center>
+						</td>
+						<td align=center width=120px>
+							<center>
+								<button style="font-size:24px;margin-left:20px"><a href='https://github.com/jiachenlei/maskdm'>GitHub</a>
+								</button>
+							</center>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</table>
 	</center>
 
@@ -188,19 +202,15 @@
 			<tr>
 				<td width=260px>
 					<center>
-						<img class="round" style="width:500px" src="./resources/teaser.png"/>
+						<img class="round" style="width:500px" src="./resources/zju.png"/>
 					</center>
 				</td>
-			</tr>
-		</table>
-		<table align=center width=850px>
-			
-			<tr>
-				<td>
-					This was a template originally made for <a href="http://richzhang.github.io/colorization/">Colorful Image Colorization</a>. The code can be found in this <a href="https://github.com/richzhang/webpage-template">repository</a>.
+				<td width=260px>
+					<p style="font-size:60px; font-weight:800">ICSR</p>
 				</td>
 			</tr>
 		</table>
+
 	</center>
 
 	<hr>
@@ -289,12 +299,13 @@
 	</table>
 	<br>
 	<hr>
-	<table align=center width=800px>
-		<center><h1>Paper</h1></center>
-		<tr>
-			<td><a href=""><img class="paper-big" style="height:300px" src="./resources/maskdm_paper.png"/></a></td>
-		</tr>
-	</table>
+	<div style="display:flex">
+		<table align=center width=400px>
+			<center><h1>Paper</h1></center>
+			<tr>
+				<td><a href=""><img class="paper-big" style="height:300px" src="./resources/maskdm_paper.png"/></a></td>
+			</tr>
+		</table>
 		<div>
 			<table>
 				<tr style="margin-bottom:50px">
@@ -307,40 +318,9 @@
 			<span style="font-size:4pt"><a href=""><br></a>
 			</span>
 		</div>
-
-	<br>
-
-	<hr>
-	<br>
-
-	<table align=center width=900px>
-		<tr>
-			<td width=400px>
-				<left>
-					<center><h1>Citation</h1></center>
-					<pre>
-						@article{lei2023masked,
-							title={Masked Diffusion Models are Fast and Privacy-aware Learners},
-							author={Lei, Jiachen and Cheng, Peng and Ba, Zhongjie and Ren, Kui},
-							journal={arXiv preprint arXiv:2306.11363},
-							year={2023}
-						  }
-					</pre>
-				</left>
-			</td>
-		</tr>
-	</table>
+	</div>
 
 
-	<table align=center width=900px>
-		<tr>
-			<td width=900px>
-				<left>
-					Acknowledgements: This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a href="http://richzhang.github.io/">Richard Zhang</a> .
-				</left>
-			</td>
-		</tr>
-	</table>
 <br>
 </body>
 </html>
