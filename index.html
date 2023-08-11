@@ -115,13 +115,25 @@
 		background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 	}
 
-	button {
-		width: 120px;
-		height: 50px;
+	.btn {
+		width: 100px;
+		/* height: 150px; */
+		padding: 12px 12px 12px 12px;
+		font-size: 20px;
 		margin-top: 20px;
 		border-radius: 6px;
-		background: #D9DFE8;
+		color: white !important;
+		font-weight: 600;
+		background: #003F88;
 		border: none;
+	}
+
+	a:link, a:visited {
+		/* color: #B6486F; */
+		text-decoration: none;
+	}
+	a:hover {
+		color: #002F68;
 	}
 </style>
 
@@ -175,36 +187,36 @@
 					</td>
 				</tr>
 			</table>
-			<div>
-				<table align=center width=250px>
-					<tr>
-						<td align=center width=120px>
-							<center>
-								<button style="font-size:24px;margin-right:20px" >
-									<a href='https://arxiv.org/abs/2306.11363'>Paper</a>
-								</button>
-							</center>
-						</td>
-						<td align=center width=120px>
-							<center>
-								<button style="font-size:24px;margin-left:20px"><a href='https://github.com/jiachenlei/maskdm'>GitHub</a>
-								</button>
-							</center>
-						</td>
-					</tr>
-				</table>
-			</div>
+			
 		</table>
 	</center>
 
 
-			
-	<div style="display:flex; width:850px; margin-left: 300px">
-		<img style="width:200px" src="./resources/zju.png"/>
-		<p style="font-size:75px; font-weight:800">ICSR</p>
+	<div style="display:flex; width:850px; margin: 25px 0 0 350px">
+		<img style="width:200px;height:100px" src="./resources/zju.png"/>
+		<p style="font-size:55px; font-weight:800; margin:8px 0 0 20px;">ICSR</p>
 	</div>
 
 
+	<div>
+		<table align=center width=250px>
+			<tr>
+				<td align=center width=120px>
+					<center>
+
+						<a style="margin-right:20px" class="btn"  href='https://arxiv.org/abs/2306.11363'>Paper</a>
+
+					</center>
+				</td>
+				<td align=center width=120px>
+					<center>
+						<a style="margin-left:20px" class="btn" href='https://github.com/jiachenlei/maskdm'>GitHub</a>
+
+					</center>
+				</td>
+			</tr>
+		</table>
+	</div>
 
 	<hr>
 
