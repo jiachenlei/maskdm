@@ -1,6 +1,6 @@
 # Official implementation: "Masked Diffusion Models are Fast Learners"
-
-For an *intuitive* introduction of our method, you could refer to our [project website](https://sites.google.com/view/maskdm/main). Or you could refer to our [paper](https://arxiv.org/abs/2306.11363) for more details. 
+<!-- (For an *intuitive* introduction of our method, you could refer to our [project website](https://sites.google.com/view/maskdm/main). Or ) -->
+You could refer to our [paper](https://arxiv.org/abs/2306.11363) for more details. 
 
 ## Preface
 ### Invitation for coorporations on topics related to our work
