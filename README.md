@@ -31,6 +31,10 @@ As our current project is still a work in progress, we plan to gradually present
 - [] Experiments that analyze masked score matching in latent space
 - More...
 
+## Errata
+- In unconditional image synthesis experiment, the reported time expense of baseline model is inaccurate and is **expeceted to be larger**
+
+We trained the baseline model for 940k steps which took 120 hours on 8 V100s, ~1.3 hour per 10k steps. However, we reported 32 V100-days as the time expense of baseline model in our v1.0 paper, which is smaller than the actual value. The correct time expense is ~**38 V100-day**. As for our method, the reported values are double-checked and found to be precise.
 
 ---
 
@@ -48,11 +52,15 @@ As our current project is still a work in progress, we plan to gradually present
 ## Documentation
 - For the usage of `Acclerate` or `Wandb` library, please refer to the official documentation.
 
-### Environment
-```python
+## Environment
+
+```
 accelerate
 timm
-torch
+torch/torchvision
+einops
+wandb
+ema-pytorch
 PyWavelets
 ```
 We also released a [docker image](https://hub.docker.com/layers/jiachenlei/maskdm/xformer/images/sha256-38a8e8e6cb06dc8938bf79a564ab1e3c999cc6a5b307c6f579c41fd456c79476?context=repo).
@@ -86,8 +94,9 @@ accelerate launch eval.py --name temp --config /path/to/config/file.yml --bs 64 
 To compute FID score on generated images and the reference images which, under most circumstances, is the training set, use the following command:
 
 ```python
-
-python -m tools.pytorch_fid --device cuda:0 /path/to/image/folder1 /path/to/image/folder2
+cd tools
+# run the following command in ./tools
+python pytorch_fid --device cuda:0 /path/to/image/folder1 /path/to/image/folder2
 
 # notice that the structure of the folder provided in the path should look like:
 # - /path/to/image/folder1
