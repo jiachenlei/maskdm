@@ -1,1 +1,1 @@
-from .mask_uvit import MaskedUViT, MaskedDWTUViT
+from .mask_uvit import MaskedUViT

@@ -10,17 +10,15 @@ from accelerate import DistributedDataParallelKwargs
 import torch
 import torch.distributed as dist
 import torch.multiprocessing as mp
-
 from torchvision.utils import save_image
 
 from gaussian_ddpm import GaussianDiffusion
 
-from models import MaskedUViT, MaskedDWTUViT
+from models import MaskedUViT
 
 from utils.config import parse_yml, combine
 from utils.helper import maybe_unnormalize_to_zero_to_one
 
-from datasets import CelebAHQ, CelebA, VggFace
 
 def parse_terminal_args():
 
@@ -28,18 +26,32 @@ def parse_terminal_args():
 
     parser.add_argument("--config", type=str, help="path to config file")
     parser.add_argument("--overwrite", default="command-line", type=str, help="overwrite config/command-line arguments when conflicts occur")
+    
     parser.add_argument("--bs", type=int, help="batch size used in evaluation")
     parser.add_argument("--total_samples", type=int, default=3000, help="samples to generate")
     parser.add_argument("--sampling_steps", type=int, default=250, help="DDIM sampling steps")
     parser.add_argument("--ddim_sampling_eta", type=float, default=1.0, help="DDIM sampling eta coefficient")
-    parser.add_argument("--sampler", type=str, default="ddim", help="sampler to use [ddim]")
+
     parser.add_argument("--output", nargs="+", help="list of output path to save images")
     parser.add_argument("--ckpt", nargs="+",  help="list of path to model checkpoint")
 
-    parser.add_argument("--guidance_weight", type=float, default=-1,  help="guidance_weight, should be >=0, -1 means no guidance")
-    parser.add_argument("--use_corrector", action="store_true",  help="use langevin corrector or not")
-
     return parser.parse_args()
+
+
+class Sampler(torch.nn.Module):
+
+    def __init__(self, model):
+
+        super().__init__()
+
+        self.model = model
+
+    def forward(self, *args, **kwargs):
+
+        return self.model.sample(
+            *args,
+            **kwargs
+        )
 
 
 def setup_for_distributed(is_master):
@@ -61,15 +73,12 @@ def build_model(args):
     name = args.network["name"]
     if name == "maskdm":
         return MaskedUViT(**args.network)
-    elif name =="maskdwt":
-        return MaskedDWTUViT(**args.network)
     else:
         raise NotImplementedError(f"Unsupported network type: {name}")
 
 
 def save_img_onebyone(images_tensor, output_path, name):
-    for i in range(images_tensor.shape[0]):
-        # torch.save(images_tensor[i], os.path.join(output_path, name+f"_{i}.pt") )       
+    for i in range(images_tensor.shape[0]):    
         save_image(images_tensor[i], os.path.join(output_path, name+f"_{i}.png"))
 
 
@@ -114,25 +123,15 @@ def evaluation():
         normalization = getattr(args.dataset, "NORMALIZATION", True), 
 
         loss_type = 'l2',            # L1 or L2
-        shift=getattr(args, "shift", False),
         channels = args.network.get("in_chans", 3),
     )
     diffusion_model.to(device)
     diffusion_model.eval()
+    dm_sampler = Sampler(diffusion_model)
+    # speedup sampling with mixed precision
+    dm_sampler = accelerator.prepare(dm_sampler)
 
-    available_datasets= {
-        "vggface": VggFace,
-        "celebahq": CelebAHQ,
-        "celeba": CelebA,
-    }
-
-    dataset = None
-    if args.guidance_weight >=0:
-        dataset = available_datasets[args.dataset.NAME](
-            cfg = args.dataset, mode="train", mask_generator=None, verbose = accelerator.is_main_process
-        )
-
-    # load model weights
+    # load model weights sequentially
     for i, ckpt in enumerate(args.ckpt):
         total_samples = args.total_samples
         exist_samples = len(os.listdir(args.output[i]))
@@ -157,7 +156,7 @@ def evaluation():
                     k = k[10:] # remove prefix: ema_model.
                     state_dict[k] = v
 
-            missing_key, unexpected_key = diffusion_model.load_state_dict(state_dict, strict=False)
+            missing_key, unexpected_key = accelerator.unwrap_model(dm_sampler).model.load_state_dict(state_dict, strict=False)
             print("missing keys: ",missing_key)
             print("unexpected keys: ",unexpected_key)
         else:
@@ -168,27 +167,10 @@ def evaluation():
         if last:
             batch_size_lst += [last]
 
-        if args.sampler == "ddim":
-            print("use corrector: ", args.use_corrector)
-
-            for j, bs in enumerate(batch_size_lst):
-                samples = diffusion_model.sample(
-                                    batch_size=bs,
-                                    guidance_weight=args.guidance_weight,
-                                    guidance_idx = dataset.sample_label(bs, device=device) if args.guidance_weight>=0 else None,
-                                    use_corrector=args.use_corrector)
-                print(samples.mean(), samples.std(), samples.min(), samples.max())
-                if args.use_corrector:
-                    # use corrector
-                    img, corrected_img = samples
-                    random_name = random.random()
-                    # save_img_onebyone(img, output_path, f"sample_{subprocess}_{random_name}")
-                    save_img_onebyone(corrected_img, output_path, f"sample_{subprocess}_{random_name}_corrected")
-                else:
-                    save_img_onebyone(samples, output_path, f"sample_{subprocess}_{random.random()}")
-
-        else:
-            raise NotImplementedError(f"Unsupported sampler:{args.sampler}")
+        # start sampling
+        for j, bs in enumerate(batch_size_lst):
+            samples = diffusion_model.sample(batch_size=bs)
+            save_img_onebyone(samples, output_path, f"sample_{subprocess}_{random.random()}")
 
         accelerator.wait_for_everyone()
 

@@ -21,7 +21,6 @@ class VggFace(MaskdmDataset):
     def __init__(self, *args, **kwargs):
         
         super().__init__(*args, **kwargs)
-
         self.name = "vggface"
 
     def build_dataset(self):
@@ -47,10 +46,26 @@ class VggFace(MaskdmDataset):
         if self.mode == "train":
             self.data_transform = transforms.Compose([
                 transforms.ToTensor(),
-                # ShortSideResize(self.short_side_size),
                 transforms.RandomHorizontalFlip(self.hflip_prob),
-                # transforms.CenterCrop((self.imsize, self.imsize)),
-                # transforms.Normalize(mean=self.mean, std=self.std)
             ])
         else:
             raise NotImplementedError("No transformations are defined for [test/val] mode")
+
+    def __getitem__(self, index):
+
+        pack = self.package[index]
+        img_path = pack["img_path"]
+        label = pack["label"]
+        img = self.load_img(img_path) # torch.Tensor
+    
+        m = self.generate_mask()
+        m = torch.from_numpy(m)
+
+        if self.task == "cond":
+            m = torch.cat([torch.tensor([0, 0]), m], dim=0) # skip time and condition tokens
+            return img, m, int(label)
+        elif self.task == "uncond":
+            m = torch.cat([torch.tensor([0]), m], dim=0) # skip time token
+            return img, m
+        else:
+            raise ValueError(f"Unsupported task for {self.name}")

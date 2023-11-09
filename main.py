@@ -19,11 +19,11 @@ from torch.utils.data import DataLoader
 from torchvision import utils
 
 from gaussian_ddpm import GaussianDiffusion
-from models import MaskedUViT, MaskedDWTUViT
+from models import MaskedUViT
 
-from datasets import VggFace, CelebAHQ, CelebA
+from datasets import VggFace, CelebAHQ, CelebA, LSUN
 from datasets import ( RandomMaskingGenerator, RandomBlockMaskingGenerator,
-                      CropMaskingGenerator, DWTMaskingGenerator,)
+                      CropMaskingGenerator,)
 
 from utils.config import parse_yml, combine
 from utils.lr_schedule import prepare_lr_schedule
@@ -77,8 +77,6 @@ def build_model(args):
     name = args.network["name"]
     if name == "maskdm":
         return MaskedUViT(**args.network)
-    elif name == "maskdwt":
-        return MaskedDWTUViT(**args.network)
     else:
         raise NotImplementedError("only support mask uvit training")
 
@@ -128,13 +126,10 @@ def main():
     else:
         print("No pretrained model ckpt is provided, train from scratch..")
 
-    timesteps = 1000
+    timesteps = 1000 # by default T=1000
     beta_schedule = getattr(args, "beta_schedule", "cosine")
-    shift = getattr(args, "shift", False)
-    loss_weight = getattr(args, "loss_weight", "p2")
-    p2_loss_weight_gamma = getattr(args, "p2_loss_weight_gamma", 0)
 
-    print(f"beta schedule:{beta_schedule}, loss_weight:{loss_weight} gamma:{p2_loss_weight_gamma}, shift:{shift}")
+    print(f"beta schedule:{beta_schedule}")
 
     diffusion_model = GaussianDiffusion(
         model,
@@ -144,8 +139,6 @@ def main():
         loss_type = getattr(args, "loss_type", "l2"),            # L1 or L2
 
         normalization = getattr(args.dataset, "NORMALIZATION", True), 
-        loss_weight = loss_weight,
-        p2_loss_weight_gamma = p2_loss_weight_gamma,
 
         clip_denoised = getattr(args, "clip_denoised", True), 
         clip_max = getattr(args, "clip_max", 1), 
@@ -153,7 +146,6 @@ def main():
 
         channels = args.network.get("in_chans", 3),
         beta_schedule = beta_schedule,
-        shift = shift,
     )
 
     n_parameters = sum(p.numel() for p in diffusion_model.parameters() if p.requires_grad)
@@ -184,19 +176,9 @@ def main():
     mask_crop_size = getattr(args.dataset, "MASK_CROP_SIZE", None)
     mask_block_size  = getattr(args.dataset, "MASK_BLOCK_SIZE", None)
 
-    use_dwt = getattr(args.dataset, "USE_DWT", False)
-    dwt_level = args.network.get("level", 1)
     print(f"Mask type:{mask_type}  Mask ratio:{mask_ratio} Mask crop size:{mask_crop_size}")
 
-    if use_dwt:
-        # NOTE: mask_ratio should be a list
-        mask_generator = DWTMaskingGenerator(
-            window_size, dwt_level, *mask_ratio, 
-            scale = args.network["scale"],
-            mask_type="patch", block_size=mask_block_size,
-        )
-
-    elif mask_type == "patch":
+    if mask_type == "patch":
         mask_generator = RandomMaskingGenerator(
             window_size, mask_ratio
         )
@@ -216,25 +198,20 @@ def main():
     available_datasets= {
         "vggface": VggFace,
         "celebahq": CelebAHQ,
+        "lsun": LSUN,
         "celeba": CelebA,
     }
     dataset = available_datasets[args.dataset.NAME](
         cfg = args.dataset, mode="train", mask_generator=mask_generator, verbose = accelerator.is_main_process
     )
     loader = DataLoader(dataset, batch_size = args.batch_size, 
-                        shuffle = True, pin_memory = True,
+                        shuffle = True, pin_memory = True, persistent_workers = True,
                         num_workers = getattr(args, "num_workers", 16))
     loader = accelerator.prepare(loader)
     loader = cycle(loader)
 
-    lr_schedule_value = prepare_lr_schedule(
-                                base_value = args.lr, 
-                                final_value = args.lr, 
-                                total_iters = args.train_steps,
-                                warmup_iters = getattr(args, "warmup_steps", 0),
-                                start_warmup_value = getattr(args, "warmup_lr", None),
-                                schedule="cosine"
-                            )
+    lr_scheduler = prepare_lr_schedule( optimizer=opt, 
+                                        warmup_steps = getattr(args, "warmup_steps", 0))
 
     print(f"Start training from step:{start_step}")
     print(f"Using gradient accumulation: {args.gradient_accumulate_every}")
@@ -255,10 +232,10 @@ def main():
         results_folder = results_folder,
         clip_grad = getattr(args, "clip_grad", 1.0),
 
-        lr_schedule_value = lr_schedule_value, # lr scheduler
+        lr_scheduler = lr_scheduler, # lr scheduler
     )
 
-
+# for resume training
 def load_training_state(model, ema, accelerator, opt, milestone, results_folder="./results"):
 
     device = accelerator.device

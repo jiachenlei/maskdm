@@ -1,0 +1,48 @@
+define: &img_size 256
+define: &patch_size 4
+
+pretrained_model_ckpt: ""
+batch_size: 256
+lr: 2.0e-4 # 2.0e-4
+adam_betas: [0.99, 0.99]
+weight_decay: 0.03
+results_folder: ""
+
+ema_decay: 0.999
+ema_update_every: 1
+clip_grad: 1.0
+
+# dataset
+beta_schedule: "cosine"
+num_workers: 5
+
+normalization: true
+clip_max: 1
+clip_min: -1
+
+dataset:
+  NAME: celebahq
+  PATH: "NOTE: The image folder should contain all images"
+
+  MASK_TYPE: "block"
+  MASK_RATIO: 0.9
+  MASK_BLOCK_SIZE: 4
+  MASK_CROP_SIZE: -1
+
+  hflip_prob: 0.0
+
+network:
+  name : 'maskdm'
+  img_size : *img_size
+  patch_size : *patch_size
+  in_chans : 3
+
+  encoder_embed_dim : 768
+  encoder_depth : 12
+  encoder_heads : 12
+
+  mlp_ratio : 4
+  qkv_bias : False
+
+  mlp_time_embed : False
+  use_checkpoint : False

@@ -39,7 +39,7 @@ def train(
         results_folder = './results',
         clip_grad = 1.0,
 
-        lr_schedule_value = None,
+        lr_scheduler = None,
     ):
     assert has_int_squareroot(num_samples), 'number of samples must have an integer square root'
 
@@ -48,11 +48,6 @@ def train(
 
     with tqdm(initial = start_step, total = train_num_steps, disable = not accelerator.is_main_process) as pbar:
         while current_step < train_num_steps:
-            
-            # learning rate schedule
-            if lr_schedule_value is not None:
-                for param in opt.param_groups:
-                    param["lr"] = lr_schedule_value[current_step]
 
             total_loss = 0.
             for _ in range(gradient_accumulate_every):
@@ -86,6 +81,7 @@ def train(
             accelerator.wait_for_everyone()
 
             opt.step()
+            lr_scheduler.step()
             opt.zero_grad()
 
             accelerator.wait_for_everyone()

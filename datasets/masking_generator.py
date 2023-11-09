@@ -55,8 +55,8 @@ class RandomBlockMaskingGenerator:
         self.num_mask = int(mask_ratio * self.num_patches) // (self.block_size**2)
 
     def __repr__(self):
-        repr_str = "Random Block-wise Mask: total patches {}, mask patches {}".format(
-            self.num_patches, self.num_mask
+        repr_str = "Random Block-wise Mask: total blocks {}, masked blocks {}".format(
+            self.num_blocks, self.num_mask
         )
         return repr_str
 
@@ -105,46 +105,3 @@ class CropMaskingGenerator:
         mask.put(idx_range, 0)
 
         return mask.flatten()
-
-
-class DWTMaskingGenerator:
-    def __init__(self, input_size, level, approx_mask_ratio, detail_mask_ratio, 
-                 scale = 2,
-                 mask_type="patch", block_size=1):
-        if not isinstance(input_size, tuple):
-            input_size = (input_size,) * 2
-
-        self.height, self.width = input_size # input size of approx or detail
-        self.level = level
-        self.mask_type = mask_type
-        self.approx_mask_ratio, self.detail_mask_ratio = approx_mask_ratio, detail_mask_ratio
-        self.num_patches = self.height * self.width
-
-        self.scale = scale # patch size of details is bigger
-        self.approx_mask_patch = int( self.num_patches * approx_mask_ratio )
-        self.detail_mask_patch = int( self.num_patches // scale**2 * detail_mask_ratio )
-
-        self.avail_mask_fn = {
-            "patch": RandomMaskingGenerator,
-            "block": partial(RandomBlockMaskingGenerator, block_size=block_size),
-        }
-
-        self.approx_mask_gen = self.avail_mask_fn[mask_type](input_size, approx_mask_ratio)
-        self.detail_mask_gen = self.avail_mask_fn[mask_type]((input_size[0]//scale, input_size[1]//scale), detail_mask_ratio)
-
-    def __repr__(self):
-        repr_str = "DWT Mask: total patches {}, level {} mask patches(approx, detail) ({}, {})".format(
-            self.num_patches, self.level, self.approx_mask_patch, self.detail_mask_patch
-        )
-        return repr_str
-
-    def __call__(self):
-
-        approx_mask = self.approx_mask_gen()
-        detail_mask = self.detail_mask_gen()
-        
-        # detail_mask = np.concatenate( [self.detail_mask_gen() for i in range(self.num_divide-1)] )
-
-        mask = np.concatenate((approx_mask, detail_mask))
-
-        return mask
